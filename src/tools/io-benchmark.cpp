@@ -1,4 +1,4 @@
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
 
@@ -13,7 +13,7 @@
 #ifdef __linux__
 #include <malloc.h>
 #endif
-#if defined(__FreeBSD__) || defined(__APPLE__)
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <unistd.h>
 #endif
 
@@ -59,6 +59,10 @@ int main(int argc, char *argv[])
     osrm::util::Log() << "Not supported on FreeBSD";
     return 0;
 #endif
+#ifdef __OpenBSD__
+    osrm::util::Log() << "Not supported on OpenBSD";
+    return 0;
+#endif
 #ifdef _WIN32
     osrm::util::Log() << "Not supported on Windows";
     return 0;
@@ -96,7 +100,7 @@ int main(int argc, char *argv[])
         TIMER_STOP(write_1gb);
         fclose(fd);
 #endif
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
         int fd = open(test_path.string().c_str(), O_WRONLY | O_CREAT | O_TRUNC | O_DIRECT, 0644);
         fcntl(fd, F_RDAHEAD, 0);
         TIMER_START(write_1gb);
@@ -202,7 +206,7 @@ int main(int argc, char *argv[])
             int ret2 = read(fileno(fd), (char *)&single_block[0], 4096);
 #endif
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
             int ret1 = 0;
             int ret2 = 0;
 #endif
@@ -259,7 +263,7 @@ int main(int argc, char *argv[])
             int ret2 = read(fileno(fd), (char *)&single_block, 4096);
 #endif
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
             int ret1 = 0;
             int ret2 = 0;
 #endif
